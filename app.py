@@ -204,9 +204,32 @@ def add_transaction():
             return jsonify({'message': 'Insuficient amount of coins'}), 400
         transaction = wallet.create_transaction(public_key, value)
         blockchain.add_transaction(transaction)
+        announce_new_transaction(transaction_json)
         return jsonify({'message': f'Pending transaction {transaction.tx_hash} added to the Blockchain'}), 201
     except BlockchainException as bce:
         return jsonify({'message': f'Transaction rejected: {bce}'}), 400
+
+def announce_new_transaction(transaction):
+    """
+    A function to announce to the network that a new transaction has been added to pending.
+    """ 
+    for node in json.loads(get_nodes()):
+        address = node['address']
+        if address != domain:
+            url = "{}/add_transaction".format(address)
+            requests.post(url, json=transaction)
+
+@app.route('/add_transaction', methods=['POST'])
+def add_new_transaction():
+    transaction_json = request.get_json(force=True)
+    private_key = transaction_json['privateKey']
+    public_key = transaction_json['publicKey']
+    value = float(transaction_json['value'])
+    wallet = KeyPair(private_key)
+    transaction = wallet.create_transaction(public_key, value)
+    blockchain.add_transaction(transaction)
+
+    return "The transaction was added", 200
 
 @app.route('/avgtimes', methods=['GET'])
 def get_averages():
