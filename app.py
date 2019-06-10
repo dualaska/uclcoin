@@ -106,7 +106,7 @@ def get_balance(address):
     if not re.match(r'[\da-f]{66}$', address):
         return jsonify({'message': 'Invalid address'}), 400
 
-    balance = blockchain.get_balance(address)
+    balance = blockchain.get_balance_pending(address)
     return jsonify({'balance': balance}), 200
 
 
