@@ -231,11 +231,15 @@ def announce_new_transaction(transaction):
 
 @app.route('/add_transaction', methods=['POST'])
 def add_new_transaction():
-    transaction_json = request.get_json(force=True)
-    transaction = Transaction.from_dict(transaction_json)
-    blockchain.add_transaction(transaction)
-
-    return "The transaction was added", 200
+    try:
+        transaction_json = request.get_json(force=True)
+        transactionObj = json.loads(transaction_json)
+        transaction = Transaction.from_dict(transactionObj)
+        blockchain.add_transaction(transaction)
+        
+        return "The transaction was added", 200
+    except BlockchainException as bce:
+        return jsonify({'message': f'Transaction rejected: {bce}'}), 400
 
 @app.route('/avgtimes', methods=['GET'])
 def get_averages():
