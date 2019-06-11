@@ -3,7 +3,7 @@ import requests
 import json
 from collections import namedtuple
 
-r = requests.get('http://127.0.0.1:5000/block/minable/02f6a1813ae470f9c3c71eda29bbc711de17822946e87d84936eb3990ec4c74350')
+r = requests.get('http://127.0.0.1:5000/block/minable/036b86d828203c1d2f30d689b45fcae5bc700358afafd18012f15121220de17662')
 last_block = json.loads(r.text)
 block = Block.from_dict(last_block["block"])
 difficulty = last_block["difficulty"]
