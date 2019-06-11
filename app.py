@@ -284,7 +284,7 @@ def generate_key():
 
 @app.route('/reset_blockchain', methods=['GET'])
 def get_reset_blockchain():
-    BlockChain.clear()
+    blockchain.clear()
     return jsonify({'message':'Blockchain reseted successfuly'}), 200
 
 @app.route('/reset_all_blockchains', methods=['GET'])

@@ -74,6 +74,7 @@ class BlockChain(object):
 
     def clear(self):
         self._blocks.drop()
+        self._pending_transactions.drop()
 
     def calculate_hash_difficulty(self, index=None):
         if index is None:
