@@ -231,8 +231,8 @@ def announce_new_transaction(transaction):
 
 @app.route('/add_transaction', methods=['POST'])
 def add_new_transaction():
-    transaction = request.get_json(force=True)
-    transaction = Transaction.from_dict(transaction)
+    transaction_json = request.get_json(force=True)
+    transaction = Transaction.from_dict(transaction_json)
     blockchain.add_transaction(transaction)
 
     return "The transaction was added", 200
