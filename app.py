@@ -199,8 +199,10 @@ def add_transaction():
         if not re.match(r'[\da-f]{66}$', public_key):
             return jsonify({'message': 'Invalid address'}), 400
         if value < 1:
-            return jsonify({'message': 'Invalid amount. Minimum allowed amount is 0.00001'}), 400
+            return jsonify({'message': 'Invalid amount. Minimum allowed amount is 1'}), 400
         wallet = KeyPair(private_key)
+        if(public_key == wallet.public_key):
+            return jsonify({'message': 'Destination same as source'}), 400
         balance = blockchain.get_balance_pending(wallet.public_key)
         if balance < value:
             return jsonify({'message': 'Insuficient amount of coins'}), 400
