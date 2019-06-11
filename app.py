@@ -107,8 +107,9 @@ def get_balance(address):
         return jsonify({'message': 'Invalid address'}), 400
 
     balance = blockchain.get_balance(address)
-    pending = blockchain.get_balance_pending(address)
-    return jsonify({'balance': balance, 'pending':pending}), 200
+    discount = blockchain.get_balance_discount(address)
+    future = blockchain.get_balance_future(address)
+    return jsonify({'balance': balance, 'discount':discount, 'future':future}), 200
 
 
 @app.route('/pending_transactions', methods=['GET'])
@@ -203,7 +204,7 @@ def add_transaction():
         wallet = KeyPair(private_key)
         if(public_key == wallet.public_key):
             return jsonify({'message': 'Destination same as source'}), 400
-        balance = blockchain.get_balance_pending(wallet.public_key)
+        balance = blockchain.get_balance_discount(wallet.public_key)
         if balance < value:
             return jsonify({'message': 'Insuficient amount of coins'}), 400
         transaction = wallet.create_transaction(public_key, value)

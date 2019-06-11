@@ -103,6 +103,20 @@ class BlockChain(object):
                 balance += transaction.amount
         return balance
 
+    def get_balance_future(self, address):
+        balance = self.get_balance(address)
+        for transaction in self.pending_transactions:
+            if transaction.destination == address:
+                balance += transaction.amount
+        return balance
+
+    def get_balance_discount(self, address):
+        balance = self.get_balance(address)
+        for transaction in self.pending_transactions:
+            if transaction.source == address:
+                balance -= transaction.amount + transaction.fee
+        return balance
+
     def get_balance(self, address):
         balance = 0
         for block in self.blocks:
